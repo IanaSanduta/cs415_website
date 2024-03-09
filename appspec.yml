@@ -1,15 +1,7 @@
 version: 0.0
 os: linux
 files:
-  - source: .next/
-    destination: /var/www/html/.next/
-  - source: public/
-    destination: /var/www/html/public/
-  - source: package.json
+  - source: /
     destination: /var/www/html/
-  - source: next.config.mjs
-    destination: /var/www/html/
-  - source: node_modules/
-    destination: /var/www/html/node_modules/
 
 file_exists_behavior: OVERWRITE
