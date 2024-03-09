@@ -12,17 +12,20 @@ const Register: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const response = await fetch("http://localhost:8000/register/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-          username: username, // Make sure this matches with your backend expectation
-        }),
-      });
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_API_URL_BASE + "/login/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+            username: username, // Make sure this matches with your backend expectation
+          }),
+        }
+      );
 
       if (response.ok) {
         router.push("/home"); // Redirect to the login page after successful registration
