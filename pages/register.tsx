@@ -13,7 +13,7 @@ const Register: React.FC = () => {
     event.preventDefault();
     try {
       const response = await fetch(
-        process.env.NEXT_PUBLIC_API_URL_BASE + "/login/",
+        process.env.NEXT_PUBLIC_API_URL_BASE + "/register/",
         {
           method: "POST",
           headers: {

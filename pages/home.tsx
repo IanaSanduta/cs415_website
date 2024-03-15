@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import "../src/app/globals.css";
 import router from "next/router";
@@ -22,12 +22,21 @@ import nookies from "nookies";
 //     props: {}, // will be passed to the page component as props
 //   };
 // };
+interface User {
+  username_id: number;
+  email: string;
+  password: string;
+  username: string;
+  // Add other user properties as needed, for example:
+  // email: string;
+}
 
 const Home: React.FC = () => {
   const [budgetItems, setBudgetItems] = useState([]);
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
   const [type, setType] = useState("expense"); // 'saving' or 'expense'
+  const [users, setUsers] = useState<User[]>([]);
   const handleLogout = () => {
     // Remove the token from localStorage
     localStorage.removeItem("token");
@@ -48,6 +57,22 @@ const Home: React.FC = () => {
     setAmount("");
     setDescription("");
   };
+  useEffect(() => {
+    fetchData();
+  }, []);
+  const fetchData = async () => {
+    try {
+      const response = await fetch("http://50.16.61.244/users/");
+      if (!response.ok) {
+        throw new Error("Data fetch failed");
+      }
+      const data = await response.json(); // No type casting here
+      // Extract the users array from the response and set it to the state
+      setUsers(data.users); // Fallback to an empty array if data.users is undefined
+    } catch (error) {
+      console.error("Failed to fetch users:", error);
+    }
+  };
 
   // Calculate totals
   const totalSavings = "";
@@ -66,7 +91,7 @@ const Home: React.FC = () => {
   return (
     <>
       {/* Navbar - Reuse the style from the Landing component */}
-      <nav className="bg-blue-500 text-white p-4">
+      <nav className="bg-blue-500 p-4 text-white">
         <div className="container mx-auto flex justify-between items-center">
           <Link href="/">
             <span className="text-xl font-semibold cursor-pointer">
@@ -95,10 +120,15 @@ const Home: React.FC = () => {
       </nav>
 
       {/* Main Content Area */}
-      <div className="bg-gray-100 flex flex-col items-center justify-center min-h-screen">
+      <div className="bg-gray-700 flex flex-col items-center justify-center min-h-screen">
         <div className="container mx-auto px-6 py-16 text-center">
+          <div>
+            {users.map((user) => (
+              <p key={user.username_id}>{user.username}</p> // Adjust according to actual user object structure
+            ))}
+          </div>
           <h1 className="text-4xl font-bold mb-2">Your Budget Overview</h1>
-          <p className="text-gray-700 mb-6">
+          <p className="text-gray-300 mb-6">
             Track your savings and expenses to better manage your finances.
           </p>
 
